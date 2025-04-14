@@ -366,65 +366,73 @@ interface TouchControlsProps {
 
 function TouchControls({ onDirectionChange }: TouchControlsProps) {
   return (
-    <div className="fixed bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 grid grid-cols-3 gap-1 md:gap-2 md:hidden touch-none">
-      <div className="w-12 h-12 md:w-16 md:h-16" /> {/* Empty space */}
+    <div className="grid grid-cols-3 gap-2 md:gap-3 md:hidden touch-none max-w-[200px] mx-auto">
+      <div className="w-14 h-14 md:w-16 md:h-16" /> {/* Empty space */}
       <button
-        className="w-12 h-12 md:w-16 md:h-16 bg-white/10 rounded-lg active:bg-white/30 backdrop-blur-sm border-2 border-white/20"
+        className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-gray-800 to-gray-900
+                   border-4 border-gray-700 shadow-lg active:shadow-inner active:translate-y-[1px]
+                   transition-all duration-100 relative overflow-hidden group"
         onClick={() => onDirectionChange("UP")}
         aria-label="Move Up"
       >
-        <svg
-          className="w-full h-full p-3 md:p-4 text-white"
-          viewBox="0 0 24 24"
-        >
-          <path fill="currentColor" d="M12 4l-8 8h16z" />
-        </svg>
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent group-active:from-white/5" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <svg className="w-8 h-8 text-white/90" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 4l-8 8h16z" />
+          </svg>
+        </div>
       </button>
-      <div className="w-12 h-12 md:w-16 md:h-16" /> {/* Empty space */}
+      <div className="w-14 h-14 md:w-16 md:h-16" /> {/* Empty space */}
       <button
-        className="w-12 h-12 md:w-16 md:h-16 bg-white/10 rounded-lg active:bg-white/30 backdrop-blur-sm border-2 border-white/20"
+        className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-gray-800 to-gray-900
+                   border-4 border-gray-700 shadow-lg active:shadow-inner active:translate-y-[1px]
+                   transition-all duration-100 relative overflow-hidden group"
         onClick={() => onDirectionChange("LEFT")}
         aria-label="Move Left"
       >
-        <svg
-          className="w-full h-full p-3 md:p-4 text-white"
-          viewBox="0 0 24 24"
-        >
-          <path fill="currentColor" d="M4 12l8-8v16z" />
-        </svg>
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent group-active:from-white/5" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <svg className="w-8 h-8 text-white/90" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M4 12l8-8v16z" />
+          </svg>
+        </div>
       </button>
-      <div className="w-12 h-12 md:w-16 md:h-16 bg-white/5 rounded-lg border-2 border-white/10">
-        <svg
-          className="w-full h-full p-3 md:p-4 text-white/30"
-          viewBox="0 0 24 24"
-        >
-          <circle cx="12" cy="12" r="3" fill="currentColor" />
-        </svg>
+      <div
+        className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-gray-900 to-black
+                      border-4 border-gray-800 shadow-inner"
+      >
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-3 h-3 rounded-full bg-gray-800 shadow-inner" />
+        </div>
       </div>
       <button
-        className="w-12 h-12 md:w-16 md:h-16 bg-white/10 rounded-lg active:bg-white/30 backdrop-blur-sm border-2 border-white/20"
+        className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-gray-800 to-gray-900
+                   border-4 border-gray-700 shadow-lg active:shadow-inner active:translate-y-[1px]
+                   transition-all duration-100 relative overflow-hidden group"
         onClick={() => onDirectionChange("RIGHT")}
         aria-label="Move Right"
       >
-        <svg
-          className="w-full h-full p-3 md:p-4 text-white"
-          viewBox="0 0 24 24"
-        >
-          <path fill="currentColor" d="M20 12l-8-8v16z" />
-        </svg>
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent group-active:from-white/5" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <svg className="w-8 h-8 text-white/90" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M20 12l-8-8v16z" />
+          </svg>
+        </div>
       </button>
-      <div className="w-12 h-12 md:w-16 md:h-16" /> {/* Empty space */}
+      <div className="w-14 h-14 md:w-16 md:h-16" /> {/* Empty space */}
       <button
-        className="w-12 h-12 md:w-16 md:h-16 bg-white/10 rounded-lg active:bg-white/30 backdrop-blur-sm border-2 border-white/20"
+        className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-gray-800 to-gray-900
+                   border-4 border-gray-700 shadow-lg active:shadow-inner active:translate-y-[1px]
+                   transition-all duration-100 relative overflow-hidden group"
         onClick={() => onDirectionChange("DOWN")}
         aria-label="Move Down"
       >
-        <svg
-          className="w-full h-full p-3 md:p-4 text-white"
-          viewBox="0 0 24 24"
-        >
-          <path fill="currentColor" d="M12 20l8-8H4z" />
-        </svg>
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent group-active:from-white/5" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <svg className="w-8 h-8 text-white/90" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 20l8-8H4z" />
+          </svg>
+        </div>
       </button>
     </div>
   );
@@ -432,7 +440,7 @@ function TouchControls({ onDirectionChange }: TouchControlsProps) {
 
 function SplashScreen({ onStart }: { onStart: () => void }) {
   return (
-    <div className="fixed inset-0 bg-black flex flex-col items-center justify-center gap-8 z-50 p-4">
+    <div className="flex flex-col items-center justify-center gap-8 p-4">
       <div className="animate-pulse w-full max-w-[600px]">
         <Image
           src="/banner.png"
@@ -508,9 +516,11 @@ export default function Home() {
   }, [gameStarted]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-black">
-      {!gameStarted && <SplashScreen onStart={() => setGameStarted(true)} />}
-      {gameStarted && <Game />}
+    <main className="min-h-screen py-8 flex items-center justify-center">
+      <div className="relative bg-black/80 backdrop-blur-sm rounded-lg shadow-2xl p-4 md:p-8">
+        {!gameStarted && <SplashScreen onStart={() => setGameStarted(true)} />}
+        {gameStarted && <Game />}
+      </div>
     </main>
   );
 }
@@ -873,13 +883,13 @@ function Game() {
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center p-4 overflow-hidden bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-[min(100vw-2rem,400px)] aspect-square mb-4 md:mb-8 relative">
+    <div className="flex flex-col items-center gap-4">
+      <div className="w-full max-w-[min(100vw-2rem,400px)] aspect-square relative">
         <canvas
           ref={canvasRef}
           width={CANVAS_SIZE}
           height={CANVAS_SIZE}
-          className="w-full h-full relative z-10 bg-black rounded-lg"
+          className="w-full h-full bg-black rounded-lg"
         />
         {!isStarted && <StartButton onStart={() => setIsStarted(true)} />}
       </div>
@@ -890,7 +900,7 @@ function Game() {
         isPixelMode={isPixelMode}
         onTogglePixelMode={() => setIsPixelMode(!isPixelMode)}
       />
-      <div className="mt-4 md:mt-8" /> {/* Spacer */}
+      <div className="h-4 md:h-8" /> {/* Spacer */}
       <TouchControls onDirectionChange={handleDirectionChange} />
     </div>
   );
