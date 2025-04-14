@@ -524,44 +524,122 @@ function GameHeader({
             <button
               onClick={onTogglePixelMode}
               className={`
-                px-2 py-1 font-[Press_Start_2P] text-[0.55rem] sm:text-[0.6rem]
-                transition-all duration-150 relative group
+                w-full px-2 py-1.5 font-[Press_Start_2P] text-[0.55rem] sm:text-[0.6rem]
+                transition-all duration-150 relative group overflow-hidden
                 ${
                   isPixelMode
-                    ? "bg-gray-800 text-white border-t border-l border-gray-700 border-r border-b border-gray-900"
-                    : "bg-gray-900 text-white border-t border-l border-gray-800 border-r border-b border-gray-950"
+                    ? "bg-gradient-to-b from-purple-700 to-purple-900 text-white border-2 border-t-purple-400 border-l-purple-500 border-r-purple-900 border-b-purple-950"
+                    : "bg-gradient-to-b from-gray-700 to-gray-900 text-white border-2 border-t-gray-500 border-l-gray-600 border-r-gray-900 border-b-gray-950"
                 }
-                hover:bg-gray-700 active:bg-gray-900
+                hover:brightness-110 hover:shadow-[0_0_10px_rgba(255,255,255,0.2)]
+                active:translate-y-[1px] active:brightness-90
                 active:border-t-gray-900 active:border-l-gray-900
                 active:border-r-gray-700 active:border-b-gray-700
-                active:translate-y-[1px]
               `}
             >
               {/* Pixel corners */}
-              <div className="absolute -top-0.5 -left-0.5 w-1 h-1 bg-gray-600" />
-              <div className="absolute -top-0.5 -right-0.5 w-1 h-1 bg-gray-600" />
-              <div className="absolute -bottom-0.5 -left-0.5 w-1 h-1 bg-gray-950" />
-              <div className="absolute -bottom-0.5 -right-0.5 w-1 h-1 bg-gray-950" />
+              <div
+                className={`absolute -top-0.5 -left-0.5 w-1.5 h-1.5 transform rotate-45 ${
+                  isPixelMode ? "bg-purple-300" : "bg-gray-400"
+                }`}
+              />
+              <div
+                className={`absolute -top-0.5 -right-0.5 w-1.5 h-1.5 transform rotate-45 ${
+                  isPixelMode ? "bg-purple-300" : "bg-gray-400"
+                }`}
+              />
+              <div
+                className={`absolute -bottom-0.5 -left-0.5 w-1.5 h-1.5 transform rotate-45 ${
+                  isPixelMode ? "bg-purple-950" : "bg-gray-950"
+                }`}
+              />
+              <div
+                className={`absolute -bottom-0.5 -right-0.5 w-1.5 h-1.5 transform rotate-45 ${
+                  isPixelMode ? "bg-purple-950" : "bg-gray-950"
+                }`}
+              />
+
+              {/* Inner shadow overlay */}
+              <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-black/20 pointer-events-none" />
 
               {/* Button text */}
-              <span className="relative z-10">
+              <span className="relative z-10 block">
                 {isPixelMode ? "NORMAL" : "PIXEL"}
               </span>
+
+              {/* Pressed state overlay */}
+              <div className="absolute inset-0 bg-black/0 group-active:bg-black/20 transition-colors duration-75" />
+
+              {/* Hover glow effect */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <div
+                  className={`absolute inset-0 ${
+                    isPixelMode ? "bg-purple-500/10" : "bg-white/10"
+                  }`}
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+              </div>
+
+              {/* Active state glow */}
+              <div
+                className={`absolute inset-0 opacity-0 group-active:opacity-100 transition-opacity duration-75 ${
+                  isPixelMode ? "bg-purple-500/20" : "bg-white/20"
+                }`}
+              />
             </button>
           </div>
 
           {/* Center section - Title */}
-          <div className="flex-1 text-center">
+          <div className="flex-1 text-center flex items-center justify-center">
             <h1 className="font-[Press_Start_2P] text-white text-xs sm:text-sm md:text-base tracking-wider">
               SNAAKE v1.0
             </h1>
           </div>
 
           {/* Right section - Difficulty */}
-          <div className="w-20 sm:w-24 text-right">
-            <span className="font-[Press_Start_2P] text-[0.55rem] sm:text-[0.6rem] md:text-xs text-white/70">
-              {getDifficulty(level)}
-            </span>
+          <div className="w-20 sm:w-24 text-right flex items-center justify-end h-full pr-1.5 sm:pr-2">
+            <div
+              className={`
+              relative px-2 py-1.5 rounded-sm flex items-center justify-center min-w-[64px] sm:min-w-[72px]
+              ${
+                level <= 3
+                  ? "bg-green-900/50"
+                  : level <= 6
+                  ? "bg-orange-900/50"
+                  : "bg-red-900/50"
+              }
+              ${
+                level <= 3
+                  ? "border border-green-500"
+                  : level <= 6
+                  ? "border border-orange-500"
+                  : "border border-red-500"
+              }
+              transition-colors duration-300
+            `}
+            >
+              {/* Glow effect */}
+              <div
+                className={`
+                absolute inset-0 rounded-sm blur-[2px] opacity-50
+                ${
+                  level <= 3
+                    ? "bg-green-500"
+                    : level <= 6
+                    ? "bg-orange-500"
+                    : "bg-red-500"
+                }
+                animate-pulse
+              `}
+              />
+
+              {/* Inner shadow */}
+              <div className="absolute inset-0 rounded-sm bg-gradient-to-b from-white/10 to-black/20" />
+
+              <span className="font-[Press_Start_2P] text-[0.55rem] sm:text-[0.6rem] md:text-xs text-white relative z-10 whitespace-nowrap">
+                {getDifficulty(level)}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -1128,19 +1206,22 @@ function drawGameOver(
     const buttonY = rect.height * 0.75;
     const pixelSize = 2;
 
-    const drawPixelButton = (isPressed: boolean = false) => {
+    const drawPixelButton = (
+      isPressed: boolean = false,
+      isHovered: boolean = false
+    ) => {
       // Button background with darker purple
-      ctx.fillStyle = isPressed ? "#2a0066" : "#1a0033";
+      ctx.fillStyle = isPressed ? "#2a0066" : isHovered ? "#2d0080" : "#1a0033";
       ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
 
-      // Neon border effect
-      ctx.fillStyle = isPressed ? "#9933ff" : "#7700ff";
+      // Neon border effect with enhanced hover state
+      ctx.fillStyle = isPressed ? "#9933ff" : isHovered ? "#b366ff" : "#7700ff";
       // Top and left highlight
       ctx.fillRect(buttonX, buttonY, buttonWidth, pixelSize);
       ctx.fillRect(buttonX, buttonY, pixelSize, buttonHeight);
 
       // Bottom and right shadow
-      ctx.fillStyle = "#33004d";
+      ctx.fillStyle = isHovered ? "#4d0099" : "#33004d";
       ctx.fillRect(
         buttonX,
         buttonY + buttonHeight - pixelSize,
@@ -1161,15 +1242,15 @@ function drawGameOver(
 
       // Neon text effect
       if (!isPressed) {
-        // Outer glow
-        ctx.shadowColor = "#cc66ff";
-        ctx.shadowBlur = 15;
-        ctx.fillStyle = "#cc66ff";
+        // Outer glow with enhanced hover state
+        ctx.shadowColor = isHovered ? "#dd99ff" : "#cc66ff";
+        ctx.shadowBlur = isHovered ? 20 : 15;
+        ctx.fillStyle = isHovered ? "#dd99ff" : "#cc66ff";
         ctx.fillText("RESTART", rect.width / 2, buttonY + buttonHeight / 2);
 
         // Middle glow
-        ctx.shadowBlur = 8;
-        ctx.fillStyle = "#e6b3ff";
+        ctx.shadowBlur = isHovered ? 12 : 8;
+        ctx.fillStyle = isHovered ? "#ecd9ff" : "#e6b3ff";
         ctx.fillText("RESTART", rect.width / 2, buttonY + buttonHeight / 2);
 
         // Inner bright text
@@ -1185,7 +1266,53 @@ function drawGameOver(
       ctx.shadowBlur = 0;
     };
 
+    // Initial draw of button
     drawPixelButton();
+
+    // Track hover state
+    let isHovered = false;
+
+    // Handle hover events
+    canvas.onmousemove = (e) => {
+      const mouseX = (e.clientX - rect.left) * dpr;
+      const mouseY = (e.clientY - rect.top) * dpr;
+
+      const wasHovered = isHovered;
+      isHovered =
+        mouseX >= buttonX * dpr &&
+        mouseX <= (buttonX + buttonWidth) * dpr &&
+        mouseY >= buttonY * dpr &&
+        mouseY <= (buttonY + buttonHeight) * dpr;
+
+      // Only redraw if hover state changed
+      if (wasHovered !== isHovered) {
+        // Clear button area
+        ctx.fillStyle = "rgba(0, 0, 0, 0.94)";
+        ctx.fillRect(
+          buttonX - 2,
+          buttonY - 2,
+          buttonWidth + 4,
+          buttonHeight + 4
+        );
+        drawPixelButton(false, isHovered);
+      }
+    };
+
+    // Handle mouse leave
+    canvas.onmouseleave = () => {
+      if (isHovered) {
+        isHovered = false;
+        // Clear button area
+        ctx.fillStyle = "rgba(0, 0, 0, 0.94)";
+        ctx.fillRect(
+          buttonX - 2,
+          buttonY - 2,
+          buttonWidth + 4,
+          buttonHeight + 4
+        );
+        drawPixelButton(false, false);
+      }
+    };
 
     // Handle click events with proper DPR scaling
     canvas.onclick = (e) => {
@@ -1198,9 +1325,11 @@ function drawGameOver(
         clickY >= buttonY * dpr &&
         clickY <= (buttonY + buttonHeight) * dpr
       ) {
-        drawPixelButton(true);
+        drawPixelButton(true, true);
         setTimeout(() => {
           canvas.onclick = null;
+          canvas.onmousemove = null;
+          canvas.onmouseleave = null;
           onRestart();
         }, 150);
       }
