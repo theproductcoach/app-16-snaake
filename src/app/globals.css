@@ -1,8 +1,11 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #000000;
+    --foreground: #ffffff;
 }
 
 @theme inline {
@@ -19,8 +22,26 @@
   }
 }
 
+html {
+  background-color: #000000;
+}
 body {
-  background: var(--background);
+  margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background-image: url('/bg-full.png');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: #000000;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+@media (max-width: 768px) {
+  body {
+    background-position: center;
+    background-size: cover;
+  }
 }
