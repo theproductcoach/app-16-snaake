@@ -366,70 +366,98 @@ interface TouchControlsProps {
 
 function TouchControls({ onDirectionChange }: TouchControlsProps) {
   return (
-    <div className="grid grid-cols-3 gap-2 md:gap-3 md:hidden touch-none max-w-[200px] mx-auto">
-      <div className="w-14 h-14 md:w-16 md:h-16" /> {/* Empty space */}
+    <div className="grid grid-cols-3 gap-2 md:gap-3 md:hidden touch-none w-full max-w-[180px] mx-auto mb-safe">
+      <div className="w-12 h-12 sm:w-14 sm:h-14" /> {/* Empty space */}
       <button
-        className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-gray-800 to-gray-900
-                   border-4 border-gray-700 shadow-lg active:shadow-inner active:translate-y-[1px]
-                   transition-all duration-100 relative overflow-hidden group"
+        className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-gray-800 to-gray-900
+                   border-2 sm:border-4 border-gray-700 shadow-lg active:shadow-inner active:translate-y-[1px]
+                   transition-all duration-100 relative overflow-hidden group touch-manipulation"
         onClick={() => onDirectionChange("UP")}
+        onTouchStart={(e) => {
+          e.preventDefault();
+          onDirectionChange("UP");
+        }}
         aria-label="Move Up"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent group-active:from-white/5" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <svg className="w-8 h-8 text-white/90" viewBox="0 0 24 24">
+          <svg
+            className="w-6 h-6 sm:w-8 sm:h-8 text-white/90"
+            viewBox="0 0 24 24"
+          >
             <path fill="currentColor" d="M12 4l-8 8h16z" />
           </svg>
         </div>
       </button>
-      <div className="w-14 h-14 md:w-16 md:h-16" /> {/* Empty space */}
+      <div className="w-12 h-12 sm:w-14 sm:h-14" /> {/* Empty space */}
       <button
-        className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-gray-800 to-gray-900
-                   border-4 border-gray-700 shadow-lg active:shadow-inner active:translate-y-[1px]
-                   transition-all duration-100 relative overflow-hidden group"
+        className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-gray-800 to-gray-900
+                   border-2 sm:border-4 border-gray-700 shadow-lg active:shadow-inner active:translate-y-[1px]
+                   transition-all duration-100 relative overflow-hidden group touch-manipulation"
         onClick={() => onDirectionChange("LEFT")}
+        onTouchStart={(e) => {
+          e.preventDefault();
+          onDirectionChange("LEFT");
+        }}
         aria-label="Move Left"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent group-active:from-white/5" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <svg className="w-8 h-8 text-white/90" viewBox="0 0 24 24">
+          <svg
+            className="w-6 h-6 sm:w-8 sm:h-8 text-white/90"
+            viewBox="0 0 24 24"
+          >
             <path fill="currentColor" d="M4 12l8-8v16z" />
           </svg>
         </div>
       </button>
       <div
-        className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-gray-900 to-black
-                      border-4 border-gray-800 shadow-inner"
+        className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-gray-900 to-black
+                   border-2 sm:border-4 border-gray-800 shadow-inner relative"
       >
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-3 h-3 rounded-full bg-gray-800 shadow-inner" />
+          <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-gray-800 shadow-inner" />
         </div>
       </div>
       <button
-        className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-gray-800 to-gray-900
-                   border-4 border-gray-700 shadow-lg active:shadow-inner active:translate-y-[1px]
-                   transition-all duration-100 relative overflow-hidden group"
+        className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-gray-800 to-gray-900
+                   border-2 sm:border-4 border-gray-700 shadow-lg active:shadow-inner active:translate-y-[1px]
+                   transition-all duration-100 relative overflow-hidden group touch-manipulation"
         onClick={() => onDirectionChange("RIGHT")}
+        onTouchStart={(e) => {
+          e.preventDefault();
+          onDirectionChange("RIGHT");
+        }}
         aria-label="Move Right"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent group-active:from-white/5" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <svg className="w-8 h-8 text-white/90" viewBox="0 0 24 24">
+          <svg
+            className="w-6 h-6 sm:w-8 sm:h-8 text-white/90"
+            viewBox="0 0 24 24"
+          >
             <path fill="currentColor" d="M20 12l-8-8v16z" />
           </svg>
         </div>
       </button>
-      <div className="w-14 h-14 md:w-16 md:h-16" /> {/* Empty space */}
+      <div className="w-12 h-12 sm:w-14 sm:h-14" /> {/* Empty space */}
       <button
-        className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-gray-800 to-gray-900
-                   border-4 border-gray-700 shadow-lg active:shadow-inner active:translate-y-[1px]
-                   transition-all duration-100 relative overflow-hidden group"
+        className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-gray-800 to-gray-900
+                   border-2 sm:border-4 border-gray-700 shadow-lg active:shadow-inner active:translate-y-[1px]
+                   transition-all duration-100 relative overflow-hidden group touch-manipulation"
         onClick={() => onDirectionChange("DOWN")}
+        onTouchStart={(e) => {
+          e.preventDefault();
+          onDirectionChange("DOWN");
+        }}
         aria-label="Move Down"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent group-active:from-white/5" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <svg className="w-8 h-8 text-white/90" viewBox="0 0 24 24">
+          <svg
+            className="w-6 h-6 sm:w-8 sm:h-8 text-white/90"
+            viewBox="0 0 24 24"
+          >
             <path fill="currentColor" d="M12 20l8-8H4z" />
           </svg>
         </div>
@@ -468,34 +496,94 @@ function SplashScreen({ onStart }: { onStart: () => void }) {
   );
 }
 
+function GameHeader({
+  level,
+  isPixelMode,
+  onTogglePixelMode,
+}: {
+  level: number;
+  isPixelMode: boolean;
+  onTogglePixelMode: () => void;
+}) {
+  const getDifficulty = (level: number) => {
+    if (level <= 3) return "EASY";
+    if (level <= 6) return "MEDIUM";
+    if (level <= 9) return "HARD";
+    return "INSANE";
+  };
+
+  return (
+    <div className="w-full max-w-[min(92vw,400px)] mb-2 sm:mb-4 relative">
+      <div className="bg-black/90 border border-white/10 rounded-lg p-2 sm:p-3 relative overflow-hidden">
+        {/* Glowing border effect */}
+        <div className="absolute inset-0 border border-white/20 rounded-lg shadow-[inset_0_0_10px_rgba(255,255,255,0.1)]" />
+
+        <div className="flex items-center justify-between gap-2 sm:gap-4 relative z-10">
+          {/* Left section - Pixel/Normal toggle */}
+          <div className="w-20 sm:w-24">
+            <button
+              onClick={onTogglePixelMode}
+              className={`
+                px-2 py-1 font-[Press_Start_2P] text-[0.55rem] sm:text-[0.6rem]
+                transition-all duration-150 relative group
+                ${
+                  isPixelMode
+                    ? "bg-gray-800 text-white border-t border-l border-gray-700 border-r border-b border-gray-900"
+                    : "bg-gray-900 text-white border-t border-l border-gray-800 border-r border-b border-gray-950"
+                }
+                hover:bg-gray-700 active:bg-gray-900
+                active:border-t-gray-900 active:border-l-gray-900
+                active:border-r-gray-700 active:border-b-gray-700
+                active:translate-y-[1px]
+              `}
+            >
+              {/* Pixel corners */}
+              <div className="absolute -top-0.5 -left-0.5 w-1 h-1 bg-gray-600" />
+              <div className="absolute -top-0.5 -right-0.5 w-1 h-1 bg-gray-600" />
+              <div className="absolute -bottom-0.5 -left-0.5 w-1 h-1 bg-gray-950" />
+              <div className="absolute -bottom-0.5 -right-0.5 w-1 h-1 bg-gray-950" />
+
+              {/* Button text */}
+              <span className="relative z-10">
+                {isPixelMode ? "NORMAL" : "PIXEL"}
+              </span>
+            </button>
+          </div>
+
+          {/* Center section - Title */}
+          <div className="flex-1 text-center">
+            <h1 className="font-[Press_Start_2P] text-white text-xs sm:text-sm md:text-base tracking-wider">
+              SNAAKE v1.0
+            </h1>
+          </div>
+
+          {/* Right section - Difficulty */}
+          <div className="w-20 sm:w-24 text-right">
+            <span className="font-[Press_Start_2P] text-[0.55rem] sm:text-[0.6rem] md:text-xs text-white/70">
+              {getDifficulty(level)}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function GameUI({
   score,
   level,
   highScore,
-  isPixelMode,
-  onTogglePixelMode,
 }: {
   score: number;
   level: number;
   highScore: number;
-  isPixelMode: boolean;
-  onTogglePixelMode: () => void;
 }) {
   return (
-    <div className="w-full max-w-[min(100vw-2rem,400px)] px-4">
-      <div className="flex flex-wrap justify-between items-center gap-2">
-        <div className="flex flex-wrap justify-between flex-1 gap-2 md:gap-4 text-white font-[Press_Start_2P] text-[0.65rem] sm:text-xs md:text-sm">
-          <span>Score: {score}</span>
-          <span>Level: {level}</span>
-          <span>High: {highScore}</span>
-        </div>
-        <button
-          onClick={onTogglePixelMode}
-          className="px-2 py-1 md:px-3 md:py-1.5 bg-gray-700 text-white text-[0.65rem] sm:text-xs rounded 
-                   hover:bg-gray-600 transition-colors font-[Press_Start_2P]"
-        >
-          {isPixelMode ? "Normal" : "Pixel"}
-        </button>
+    <div className="w-full max-w-[min(92vw,400px)] px-2 sm:px-4">
+      <div className="flex justify-between items-center gap-2 text-white font-[Press_Start_2P] text-[0.6rem] sm:text-xs md:text-sm">
+        <span>Score: {score}</span>
+        <span>Level: {level}</span>
+        <span>High: {highScore}</span>
       </div>
     </div>
   );
@@ -516,8 +604,8 @@ export default function Home() {
   }, [gameStarted]);
 
   return (
-    <main className="min-h-screen py-8 flex items-center justify-center">
-      <div className="relative bg-black/80 backdrop-blur-sm rounded-lg shadow-2xl p-4 md:p-8">
+    <main className="min-h-[100dvh] py-4 sm:py-8 flex items-center justify-center bg-[url('/bg-full.png')] bg-cover bg-center bg-no-repeat">
+      <div className="relative bg-black/80 backdrop-blur-sm rounded-lg shadow-2xl p-3 sm:p-4 md:p-8">
         {!gameStarted && <SplashScreen onStart={() => setGameStarted(true)} />}
         {gameStarted && <Game />}
       </div>
@@ -883,24 +971,24 @@ function Game() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="w-full max-w-[min(100vw-2rem,400px)] aspect-square relative">
+    <div className="flex flex-col items-center gap-2 sm:gap-4">
+      <GameHeader
+        level={level}
+        isPixelMode={isPixelMode}
+        onTogglePixelMode={() => setIsPixelMode(!isPixelMode)}
+      />
+      <div className="w-full max-w-[min(92vw,400px)] aspect-square relative retro-screen">
+        <div className="absolute inset-0 rounded-lg bg-gradient-to-b from-black/50 to-transparent opacity-50" />
         <canvas
           ref={canvasRef}
           width={CANVAS_SIZE}
           height={CANVAS_SIZE}
-          className="w-full h-full bg-black rounded-lg"
+          className="w-full h-full bg-black rounded-lg relative z-10"
         />
         {!isStarted && <StartButton onStart={() => setIsStarted(true)} />}
       </div>
-      <GameUI
-        score={score}
-        level={level}
-        highScore={highScore}
-        isPixelMode={isPixelMode}
-        onTogglePixelMode={() => setIsPixelMode(!isPixelMode)}
-      />
-      <div className="h-4 md:h-8" /> {/* Spacer */}
+      <GameUI score={score} level={level} highScore={highScore} />
+      <div className="h-2 sm:h-4" /> {/* Reduced spacer */}
       <TouchControls onDirectionChange={handleDirectionChange} />
     </div>
   );
@@ -915,77 +1003,248 @@ function drawGameOver(
   const canvas = ctx.canvas;
   const isMobile = window.innerWidth < 768;
 
-  // Semi-transparent overlay
-  ctx.fillStyle = "rgba(0, 0, 0, 0.85)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // Remove any existing click handlers to prevent unwanted clicks
+  canvas.onclick = null;
 
-  // Game Over text
-  ctx.font = isMobile ? "24px Press Start 2P" : "30px Press Start 2P";
-  ctx.fillStyle = "white";
-  ctx.textAlign = "center";
-  ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 40);
+  // Handle high-DPI displays
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
 
-  // Score text
-  ctx.font = isMobile ? "16px Press Start 2P" : "20px Press Start 2P";
-  ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2);
+  // Set canvas size accounting for device pixel ratio
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
 
-  // High Score text
-  if (score === highScore && score > 0) {
-    ctx.fillStyle = "#ffd700";
-    ctx.fillText("New High Score!", canvas.width / 2, canvas.height / 2 + 40);
+  // Scale all drawing operations
+  ctx.scale(dpr, dpr);
+
+  // Set canvas CSS size
+  canvas.style.width = `${rect.width}px`;
+  canvas.style.height = `${rect.height}px`;
+
+  // Dark overlay with scanline effect
+  ctx.fillStyle = "rgba(0, 0, 0, 0.94)";
+  ctx.fillRect(0, 0, rect.width, rect.height);
+
+  // Draw scanlines
+  ctx.fillStyle = "rgba(255, 255, 255, 0.02)";
+  for (let y = 0; y < rect.height; y += 4) {
+    ctx.fillRect(0, y, rect.width, 2);
   }
 
-  // Restart button
-  const buttonWidth = isMobile ? canvas.width * 0.5 : 120; // Reduced by 40%
-  const buttonHeight = isMobile ? 45 : 40; // Reduced by 40%
-  const buttonX = (canvas.width - buttonWidth) / 2;
-  const buttonY = canvas.height / 2 + (isMobile ? 60 : 80);
+  // Helper function to draw pixel-style text with glow
+  const drawPixelText = (
+    text: string,
+    y: number,
+    size: number,
+    color: string = "#fff",
+    glow: boolean = false
+  ) => {
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = `${size}px "Press Start 2P"`;
 
-  // Button background
-  ctx.fillStyle = "#1a1a1a";
-  ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+    if (glow) {
+      // Strong outer glow
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 25;
+      ctx.fillStyle = color;
+      ctx.fillText(text, rect.width / 2, y);
 
-  // Button border
-  ctx.strokeStyle = "#333333";
-  ctx.lineWidth = 2;
-  ctx.strokeRect(buttonX, buttonY, buttonWidth, buttonHeight);
+      // Medium glow layer
+      ctx.shadowBlur = 15;
+      ctx.fillStyle = "#fff";
+      ctx.fillText(text, rect.width / 2, y);
 
-  // Button text
-  ctx.fillStyle = "#ffffff";
-  ctx.font = isMobile ? "20px Press Start 2P" : "24px Press Start 2P"; // Increased text size
-  ctx.fillText("RESTART", canvas.width / 2, buttonY + (isMobile ? 30 : 25));
+      // Sharp inner text
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = "#fff";
+      ctx.fillText(text, rect.width / 2, y);
+    } else {
+      // Text shadow for depth
+      ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetX = 4;
+      ctx.shadowOffsetY = 4;
+      ctx.fillStyle = color;
+      ctx.fillText(text, rect.width / 2, y);
 
-  // Store button position for click handling
-  canvas.onclick = (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    if (
-      x >= buttonX &&
-      x <= buttonX + buttonWidth &&
-      y >= buttonY &&
-      y <= buttonY + buttonHeight
-    ) {
-      // Add hover effect
-      ctx.fillStyle = "#333333";
-      ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
-
-      // Invert text color
-      ctx.fillStyle = "#1a1a1a";
-      ctx.fillText("RESTART", canvas.width / 2, buttonY + (isMobile ? 30 : 25));
-
-      // Add glowing border
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 3;
-      ctx.strokeRect(buttonX, buttonY, buttonWidth, buttonHeight);
-
-      // Reset after a short delay
-      setTimeout(() => {
-        onRestart();
-      }, 150);
+      // Main text
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+      ctx.fillText(text, rect.width / 2, y);
     }
   };
+
+  try {
+    // Game Over text with enhanced size and glow
+    drawPixelText(
+      "GAME",
+      rect.height * 0.2,
+      isMobile ? 40 : 54,
+      "#ff0000",
+      true
+    );
+
+    drawPixelText(
+      "OVER",
+      rect.height * 0.38,
+      isMobile ? 40 : 54,
+      "#ff0000",
+      true
+    );
+
+    // Final Score with enhanced visibility
+    drawPixelText(
+      `SCORE: ${score}`,
+      rect.height * 0.57,
+      isMobile ? 18 : 22,
+      "#fff",
+      true
+    );
+
+    // High Score with glow effect
+    if (score === highScore && score > 0) {
+      drawPixelText(
+        "NEW HIGH SCORE!",
+        rect.height * 0.67,
+        isMobile ? 13 : 18,
+        "#ffd700",
+        true
+      );
+    } else if (highScore > 0) {
+      drawPixelText(
+        `BEST: ${highScore}`,
+        rect.height * 0.67,
+        isMobile ? 13 : 18,
+        "#666"
+      );
+    }
+
+    // Pixel-style button with neon purple theme
+    const buttonWidth = isMobile ? rect.width * 0.5 : 180;
+    const buttonHeight = isMobile ? 40 : 48;
+    const buttonX = (rect.width - buttonWidth) / 2;
+    const buttonY = rect.height * 0.75;
+    const pixelSize = 2;
+
+    const drawPixelButton = (isPressed: boolean = false) => {
+      // Button background with darker purple
+      ctx.fillStyle = isPressed ? "#2a0066" : "#1a0033";
+      ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+
+      // Neon border effect
+      ctx.fillStyle = isPressed ? "#9933ff" : "#7700ff";
+      // Top and left highlight
+      ctx.fillRect(buttonX, buttonY, buttonWidth, pixelSize);
+      ctx.fillRect(buttonX, buttonY, pixelSize, buttonHeight);
+
+      // Bottom and right shadow
+      ctx.fillStyle = "#33004d";
+      ctx.fillRect(
+        buttonX,
+        buttonY + buttonHeight - pixelSize,
+        buttonWidth,
+        pixelSize
+      );
+      ctx.fillRect(
+        buttonX + buttonWidth - pixelSize,
+        buttonY,
+        pixelSize,
+        buttonHeight
+      );
+
+      // Button text
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.font = `${isMobile ? 16 : 20}px "Press Start 2P"`;
+
+      // Neon text effect
+      if (!isPressed) {
+        // Outer glow
+        ctx.shadowColor = "#cc66ff";
+        ctx.shadowBlur = 15;
+        ctx.fillStyle = "#cc66ff";
+        ctx.fillText("RESTART", rect.width / 2, buttonY + buttonHeight / 2);
+
+        // Middle glow
+        ctx.shadowBlur = 8;
+        ctx.fillStyle = "#e6b3ff";
+        ctx.fillText("RESTART", rect.width / 2, buttonY + buttonHeight / 2);
+
+        // Inner bright text
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText("RESTART", rect.width / 2, buttonY + buttonHeight / 2);
+      } else {
+        // Pressed state
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = "#9933ff";
+        ctx.fillText("RESTART", rect.width / 2, buttonY + buttonHeight / 2);
+      }
+      ctx.shadowBlur = 0;
+    };
+
+    drawPixelButton();
+
+    // Handle click events with proper DPR scaling
+    canvas.onclick = (e) => {
+      const clickX = (e.clientX - rect.left) * dpr;
+      const clickY = (e.clientY - rect.top) * dpr;
+
+      if (
+        clickX >= buttonX * dpr &&
+        clickX <= (buttonX + buttonWidth) * dpr &&
+        clickY >= buttonY * dpr &&
+        clickY <= (buttonY + buttonHeight) * dpr
+      ) {
+        drawPixelButton(true);
+        setTimeout(() => {
+          canvas.onclick = null;
+          onRestart();
+        }, 150);
+      }
+    };
+  } catch (error) {
+    // Fallback rendering if there are any issues
+    console.error("Error rendering game over screen:", error);
+
+    // Simple fallback display
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = `bold ${isMobile ? 48 : 64}px sans-serif`;
+    ctx.fillStyle = "#fff";
+    ctx.fillText("GAME OVER", rect.width / 2, rect.height * 0.4);
+    ctx.font = `${isMobile ? 24 : 32}px sans-serif`;
+    ctx.fillText(`Score: ${score}`, rect.width / 2, rect.height * 0.5);
+
+    // Simple restart button
+    const buttonWidth = 200;
+    const buttonHeight = 50;
+    const buttonX = (rect.width - buttonWidth) / 2;
+    const buttonY = rect.height * 0.6;
+
+    ctx.fillStyle = "#333";
+    ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+    ctx.fillStyle = "#fff";
+    ctx.font = "24px sans-serif";
+    ctx.fillText("RESTART", rect.width / 2, buttonY + buttonHeight / 2);
+
+    // Add click handler for fallback button
+    canvas.onclick = (e) => {
+      const clickX = (e.clientX - rect.left) * dpr;
+      const clickY = (e.clientY - rect.top) * dpr;
+
+      if (
+        clickX >= buttonX * dpr &&
+        clickX <= (buttonX + buttonWidth) * dpr &&
+        clickY >= buttonY * dpr &&
+        clickY <= (buttonY + buttonHeight) * dpr
+      ) {
+        setTimeout(onRestart, 150);
+      }
+    };
+  }
 }
 
 function StartButton({ onStart }: { onStart: () => void }) {
