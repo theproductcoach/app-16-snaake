@@ -1,8 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🐍 Snaake v1.0
 
-## Getting Started
+A modern take on the classic Snake game, built with Next.js and featuring retro arcade-style graphics and responsive design.
 
-First, run the development server:
+![Snaake Game](public/banner.png)
+
+## ✨ Features
+
+- 🎮 Classic snake gameplay with modern visuals
+- 🕹️ Two visual modes: Normal and Pixel art
+- 📱 Fully responsive design with touch controls for mobile
+- 🌈 Multiple color themes that change each game
+- ⚡ Progressive difficulty system
+- 💎 Special golden food items for bonus points
+- 🏆 Local high score tracking
+- 📺 Retro CRT screen effects
+- 🎯 D-pad controls for mobile devices
+
+## 🚀 Getting Started
+
+First, install the dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
@@ -10,15 +36,75 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to play the game.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🎮 How to Play
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Use arrow keys on desktop or the D-pad on mobile to control the snake
+- Collect food to grow longer and increase your score
+- Golden food appears randomly and gives bonus points, but disappears quickly
+- Avoid hitting the walls or your own tail
+- The game speeds up as your score increases
+- Try to beat your high score!
+
+## 🎯 Controls
+
+### Desktop
+
+- ⬆️ Arrow Up: Move Up
+- ⬇️ Arrow Down: Move Down
+- ⬅️ Arrow Left: Move Left
+- ➡️ Arrow Right: Move Right
+- Enter: Start Game
+
+### Mobile
+
+- Touch-based D-pad controls
+- Tap the directional buttons to move
+
+## 🏆 Scoring System
+
+- Regular food: 1 point
+- Golden food: 3 points
+- Every 5 points increases your level
+- Each level increases game speed
+
+## 🎨 Difficulty Levels
+
+- EASY: Levels 1-3
+- MEDIUM: Levels 4-6
+- HARD: Levels 7-9
+- INSANE: Level 10+
+
+## 🛠️ Built With
+
+- [Next.js](https://nextjs.org/) - React Framework
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [TypeScript](https://www.typescriptlang.org/) - Type Safety
+- HTML5 Canvas - Game Rendering
+
+## 📱 Responsive Design
+
+The game is fully responsive and works on:
+
+- 📱 Mobile phones
+- 📱 Tablets
+- 💻 Desktops
+- 🖥️ Large screens
+
+## 🎯 Future Improvements
+
+- [ ] Additional game modes
+- [ ] Online leaderboard
+- [ ] Power-ups and obstacles
+- [ ] Sound effects and music
+- [ ] More visual themes
+
+## 📄 License
+
+This project is open source and available under the MIT License.
 
 ## Learn More
 

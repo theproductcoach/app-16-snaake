@@ -20,8 +20,8 @@ const pressStart2P = Press_Start_2P({
 });
 
 export const metadata: Metadata = {
-  title: "Snake Game",
-  description: "A retro-style snake game",
+  title: "Snaake Game",
+  description: "A retro-style snaake game",
   icons: {
     icon: "/favicon.ico",
   },
