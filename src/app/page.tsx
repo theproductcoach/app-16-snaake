@@ -1070,16 +1070,38 @@ function Game() {
 
         drawPixelRect(
           ctx,
-          xPos,
-          yPos,
-          5,
-          5,
+          xPos + 2,
+          yPos + 2,
+          3,
+          3,
           currentTheme.normalFood,
           `#${borderColor}`
         );
+        ctx.fillStyle = "#8B4513";
+        ctx.fillRect(xPos + 3, yPos, 1, 2);
+        ctx.fillStyle = "#228B22";
+        ctx.fillRect(xPos + 4, yPos, 1, 1);
       } else {
         ctx.fillStyle = currentTheme.normalFood;
-        ctx.fillRect(xPos, yPos, size, size);
+        ctx.beginPath();
+        ctx.arc(
+          xPos + CELL_SIZE / 2,
+          yPos + CELL_SIZE / 2,
+          CELL_SIZE / 2 - 2,
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+
+        ctx.fillStyle = "#8B4513";
+        ctx.fillRect(xPos + CELL_SIZE / 2 - 1, yPos + 2, 2, 4);
+
+        ctx.fillStyle = "#228B22";
+        ctx.beginPath();
+        ctx.moveTo(xPos + CELL_SIZE / 2 + 1, yPos + 2);
+        ctx.lineTo(xPos + CELL_SIZE / 2 + 4, yPos);
+        ctx.lineTo(xPos + CELL_SIZE / 2 + 3, yPos + 2);
+        ctx.fill();
       }
     }
 
