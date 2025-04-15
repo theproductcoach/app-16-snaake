@@ -699,6 +699,7 @@ function Game() {
   const [direction, setDirection] = useState<Direction>("RIGHT");
   const [gameOver, setGameOver] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
+  const [hasFirstInput, setHasFirstInput] = useState(false);
   const [speed, setSpeed] = useState(INITIAL_SPEED);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
@@ -734,23 +735,54 @@ function Game() {
 
   // Generate random food position with type
   const generateFood = (): Food => {
-    const newFood = {
-      x: Math.floor(Math.random() * GRID_SIZE),
-      y: Math.floor(Math.random() * GRID_SIZE),
-      type: Math.random() < GOLDEN_FOOD_CHANCE ? "golden" : "normal",
-    } as Food;
+    const maxRetries = 100; // Prevent infinite recursion
+    let retries = 0;
 
-    // Add timestamp for golden food
-    if (newFood.type === "golden") {
-      newFood.createdAt = Date.now();
+    while (retries < maxRetries) {
+      const newFood = {
+        x: Math.floor(Math.random() * GRID_SIZE),
+        y: Math.floor(Math.random() * GRID_SIZE),
+        type: Math.random() < GOLDEN_FOOD_CHANCE ? "golden" : "normal",
+      } as Food;
+
+      // Add timestamp for golden food
+      if (newFood.type === "golden") {
+        newFood.createdAt = Date.now();
+      }
+
+      // Check if position is valid (not on snake)
+      const isValidPosition = !snake.some(
+        (segment) => segment.x === newFood.x && segment.y === newFood.y
+      );
+
+      if (isValidPosition) {
+        return newFood;
+      }
+
+      retries++;
     }
 
-    // Ensure food doesn't spawn on snake
-    return snake.some(
-      (segment) => segment.x === newFood.x && segment.y === newFood.y
-    )
-      ? generateFood()
-      : newFood;
+    // If we couldn't find a valid position after max retries,
+    // try to find any available position systematically
+    for (let x = 0; x < GRID_SIZE; x++) {
+      for (let y = 0; y < GRID_SIZE; y++) {
+        const isValidPosition = !snake.some(
+          (segment) => segment.x === x && segment.y === y
+        );
+        if (isValidPosition) {
+          return {
+            x,
+            y,
+            type: Math.random() < GOLDEN_FOOD_CHANCE ? "golden" : "normal",
+            createdAt:
+              Math.random() < GOLDEN_FOOD_CHANCE ? Date.now() : undefined,
+          };
+        }
+      }
+    }
+
+    // If all positions are occupied (very unlikely), return a default position
+    return { x: 0, y: 0, type: "normal" };
   };
 
   // Select random theme on mount and game restart
@@ -766,6 +798,10 @@ function Game() {
   }, []);
 
   const handleDirectionChange = (newDirection: Direction) => {
+    if (!hasFirstInput) {
+      setHasFirstInput(true);
+    }
+
     switch (newDirection) {
       case "UP":
         if (direction !== "DOWN") setDirection(newDirection);
@@ -831,7 +867,7 @@ function Game() {
 
   // Game loop
   useEffect(() => {
-    if (!isStarted || gameOver) return;
+    if (!isStarted || gameOver || !hasFirstInput) return;
 
     const moveSnake = () => {
       const head = snake[0];
@@ -892,7 +928,7 @@ function Game() {
 
     const gameLoop = setInterval(moveSnake, speed);
     return () => clearInterval(gameLoop);
-  }, [snake, direction, food, gameOver, isStarted, speed]);
+  }, [snake, direction, food, gameOver, isStarted, speed, hasFirstInput]);
 
   // Draw game
   useEffect(() => {
@@ -901,6 +937,33 @@ function Game() {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (!ctx || !canvas) return;
+
+    // Get the container's size
+    const container = canvas.parentElement;
+    if (!container) return;
+
+    // Calculate the maximum size that fits in the viewport
+    const maxWidth = Math.min(
+      window.innerWidth * 0.92, // 92% of viewport width
+      window.innerHeight * 0.5, // Limit height to 50% of viewport
+      400 // Maximum size
+    );
+
+    // Set container size
+    container.style.width = `${maxWidth}px`;
+    container.style.height = `${maxWidth}px`; // Maintain aspect ratio
+
+    // Handle high DPI displays
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+
+    // Set canvas size to match container
+    canvas.width = maxWidth * dpr;
+    canvas.height = maxWidth * dpr;
+
+    // Scale the context to maintain the game's internal resolution
+    const scale = (maxWidth * dpr) / CANVAS_SIZE;
+    ctx.scale(scale, scale);
 
     // Clear canvas with black background
     ctx.fillStyle = "#000000";
@@ -1049,24 +1112,37 @@ function Game() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-2 sm:gap-4">
+    <div className="flex flex-col items-center gap-1 sm:gap-2 w-full">
       <GameHeader
         level={level}
         isPixelMode={isPixelMode}
         onTogglePixelMode={() => setIsPixelMode(!isPixelMode)}
       />
-      <div className="w-full max-w-[min(92vw,400px)] aspect-square relative retro-screen">
+      <div className="w-full relative retro-screen overflow-hidden">
         <div className="absolute inset-0 rounded-lg bg-gradient-to-b from-black/50 to-transparent opacity-50" />
         <canvas
           ref={canvasRef}
           width={CANVAS_SIZE}
           height={CANVAS_SIZE}
-          className="w-full h-full bg-black rounded-lg relative z-10"
+          className="w-full h-full bg-black rounded-lg relative z-20"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+          }}
         />
         {!isStarted && <StartButton onStart={() => setIsStarted(true)} />}
+        {isStarted && !hasFirstInput && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-white text-center font-[Press_Start_2P] text-sm sm:text-base">
+              <p>Press any direction</p>
+              <p>to start moving!</p>
+            </div>
+          </div>
+        )}
       </div>
       <GameUI score={score} level={level} highScore={highScore} />
-      <div className="h-2 sm:h-4" /> {/* Reduced spacer */}
+      <div className="h-1 sm:h-2" />
       <TouchControls onDirectionChange={handleDirectionChange} />
     </div>
   );
