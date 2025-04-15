@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 
 type Position = {
@@ -699,6 +699,7 @@ function Game() {
   const [direction, setDirection] = useState<Direction>("RIGHT");
   const [gameOver, setGameOver] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
+  const [hasFirstInput, setHasFirstInput] = useState(false);
   const [speed, setSpeed] = useState(INITIAL_SPEED);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
@@ -706,6 +707,88 @@ function Game() {
   const [isPixelMode, setIsPixelMode] = useState(false);
 
   const level = Math.floor(score / SCORE_INCREMENT) + 1;
+
+  // Generate random food position with type
+  const generateFood = useCallback((): Food => {
+    const maxRetries = 100; // Prevent infinite recursion
+    let retries = 0;
+
+    while (retries < maxRetries) {
+      const newFood = {
+        x: Math.floor(Math.random() * GRID_SIZE),
+        y: Math.floor(Math.random() * GRID_SIZE),
+        type: Math.random() < GOLDEN_FOOD_CHANCE ? "golden" : "normal",
+      } as Food;
+
+      // Add timestamp for golden food
+      if (newFood.type === "golden") {
+        newFood.createdAt = Date.now();
+      }
+
+      // Check if position is valid (not on snake)
+      const isValidPosition = !snake.some(
+        (segment) => segment.x === newFood.x && segment.y === newFood.y
+      );
+
+      if (isValidPosition) {
+        return newFood;
+      }
+
+      retries++;
+    }
+
+    // If we couldn't find a valid position after max retries,
+    // try to find any available position systematically
+    for (let x = 0; x < GRID_SIZE; x++) {
+      for (let y = 0; y < GRID_SIZE; y++) {
+        const isValidPosition = !snake.some(
+          (segment) => segment.x === x && segment.y === y
+        );
+        if (isValidPosition) {
+          return {
+            x,
+            y,
+            type: Math.random() < GOLDEN_FOOD_CHANCE ? "golden" : "normal",
+            createdAt:
+              Math.random() < GOLDEN_FOOD_CHANCE ? Date.now() : undefined,
+          };
+        }
+      }
+    }
+
+    // If all positions are occupied (very unlikely), return a default position
+    return { x: 0, y: 0, type: "normal" };
+  }, [snake]);
+
+  // Select random theme on mount and game restart
+  const selectRandomTheme = useCallback(() => {
+    const randomIndex = Math.floor(Math.random() * THEMES.length);
+    setCurrentTheme(THEMES[randomIndex]);
+  }, []);
+
+  const handleDirectionChange = useCallback(
+    (newDirection: Direction) => {
+      if (!hasFirstInput) {
+        setHasFirstInput(true);
+      }
+
+      switch (newDirection) {
+        case "UP":
+          if (direction !== "DOWN") setDirection(newDirection);
+          break;
+        case "DOWN":
+          if (direction !== "UP") setDirection(newDirection);
+          break;
+        case "LEFT":
+          if (direction !== "RIGHT") setDirection(newDirection);
+          break;
+        case "RIGHT":
+          if (direction !== "LEFT") setDirection(newDirection);
+          break;
+      }
+    },
+    [direction, hasFirstInput]
+  );
 
   // Load high score on mount
   useEffect(() => {
@@ -732,55 +815,11 @@ function Game() {
     };
   }, []);
 
-  // Generate random food position with type
-  const generateFood = (): Food => {
-    const newFood = {
-      x: Math.floor(Math.random() * GRID_SIZE),
-      y: Math.floor(Math.random() * GRID_SIZE),
-      type: Math.random() < GOLDEN_FOOD_CHANCE ? "golden" : "normal",
-    } as Food;
-
-    // Add timestamp for golden food
-    if (newFood.type === "golden") {
-      newFood.createdAt = Date.now();
-    }
-
-    // Ensure food doesn't spawn on snake
-    return snake.some(
-      (segment) => segment.x === newFood.x && segment.y === newFood.y
-    )
-      ? generateFood()
-      : newFood;
-  };
-
-  // Select random theme on mount and game restart
-  const selectRandomTheme = () => {
-    const randomIndex = Math.floor(Math.random() * THEMES.length);
-    setCurrentTheme(THEMES[randomIndex]);
-  };
-
   // Initialize game state and theme after mount
   useEffect(() => {
     setIsStarted(true);
     selectRandomTheme();
-  }, []);
-
-  const handleDirectionChange = (newDirection: Direction) => {
-    switch (newDirection) {
-      case "UP":
-        if (direction !== "DOWN") setDirection(newDirection);
-        break;
-      case "DOWN":
-        if (direction !== "UP") setDirection(newDirection);
-        break;
-      case "LEFT":
-        if (direction !== "RIGHT") setDirection(newDirection);
-        break;
-      case "RIGHT":
-        if (direction !== "LEFT") setDirection(newDirection);
-        break;
-    }
-  };
+  }, [selectRandomTheme]);
 
   // Update keyboard event handler
   useEffect(() => {
@@ -803,7 +842,7 @@ function Game() {
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [direction]);
+  }, [handleDirectionChange]);
 
   // Update speed based on score
   useEffect(() => {
@@ -827,11 +866,11 @@ function Game() {
 
       return () => clearTimeout(timeout);
     }
-  }, [food, gameOver]);
+  }, [food, gameOver, generateFood]);
 
   // Game loop
   useEffect(() => {
-    if (!isStarted || gameOver) return;
+    if (!isStarted || gameOver || !hasFirstInput) return;
 
     const moveSnake = () => {
       const head = snake[0];
@@ -892,7 +931,16 @@ function Game() {
 
     const gameLoop = setInterval(moveSnake, speed);
     return () => clearInterval(gameLoop);
-  }, [snake, direction, food, gameOver, isStarted, speed]);
+  }, [
+    snake,
+    direction,
+    food,
+    gameOver,
+    isStarted,
+    speed,
+    hasFirstInput,
+    generateFood,
+  ]);
 
   // Draw game
   useEffect(() => {
@@ -901,6 +949,34 @@ function Game() {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (!ctx || !canvas) return;
+
+    // Get the container's size
+    const container = canvas.parentElement;
+    if (!container) return;
+
+    // Calculate the maximum size that fits in the viewport
+    const maxWidth = Math.min(
+      window.innerWidth * 0.92, // 92% of viewport width
+      window.innerHeight * 0.5, // Limit height to 50% of viewport
+      400 // Maximum size
+    );
+
+    // Set container size
+    container.style.width = `${maxWidth}px`;
+    container.style.height = `${maxWidth}px`; // Maintain aspect ratio
+
+    // Handle high DPI displays
+    const dpr = window.devicePixelRatio || 1;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _rect = canvas.getBoundingClientRect();
+
+    // Set canvas size to match container
+    canvas.width = maxWidth * dpr;
+    canvas.height = maxWidth * dpr;
+
+    // Scale the context to maintain the game's internal resolution
+    const scale = (maxWidth * dpr) / CANVAS_SIZE;
+    ctx.scale(scale, scale);
 
     // Clear canvas with black background
     ctx.fillStyle = "#000000";
@@ -991,7 +1067,8 @@ function Game() {
     } else {
       const xPos = food.x * CELL_SIZE;
       const yPos = food.y * CELL_SIZE;
-      const size = CELL_SIZE - 1;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const _size = CELL_SIZE - 1;
 
       if (isPixelMode) {
         const borderColor =
@@ -1007,16 +1084,38 @@ function Game() {
 
         drawPixelRect(
           ctx,
-          xPos,
-          yPos,
-          5,
-          5,
+          xPos + 2,
+          yPos + 2,
+          3,
+          3,
           currentTheme.normalFood,
           `#${borderColor}`
         );
+        ctx.fillStyle = "#8B4513";
+        ctx.fillRect(xPos + 3, yPos, 1, 2);
+        ctx.fillStyle = "#228B22";
+        ctx.fillRect(xPos + 4, yPos, 1, 1);
       } else {
         ctx.fillStyle = currentTheme.normalFood;
-        ctx.fillRect(xPos, yPos, size, size);
+        ctx.beginPath();
+        ctx.arc(
+          xPos + CELL_SIZE / 2,
+          yPos + CELL_SIZE / 2,
+          CELL_SIZE / 2 - 2,
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+
+        ctx.fillStyle = "#8B4513";
+        ctx.fillRect(xPos + CELL_SIZE / 2 - 1, yPos + 2, 2, 4);
+
+        ctx.fillStyle = "#228B22";
+        ctx.beginPath();
+        ctx.moveTo(xPos + CELL_SIZE / 2 + 1, yPos + 2);
+        ctx.lineTo(xPos + CELL_SIZE / 2 + 4, yPos);
+        ctx.lineTo(xPos + CELL_SIZE / 2 + 3, yPos + 2);
+        ctx.fill();
       }
     }
 
@@ -1029,6 +1128,7 @@ function Game() {
         setGameOver(false);
         setSpeed(INITIAL_SPEED);
         setScore(0);
+        setHasFirstInput(false);
         selectRandomTheme();
       });
     }
@@ -1042,6 +1142,9 @@ function Game() {
     level,
     currentTheme,
     isPixelMode,
+    direction,
+    generateFood,
+    selectRandomTheme,
   ]);
 
   if (!isStarted) {
@@ -1049,24 +1152,37 @@ function Game() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-2 sm:gap-4">
+    <div className="flex flex-col items-center gap-1 sm:gap-2 w-full">
       <GameHeader
         level={level}
         isPixelMode={isPixelMode}
         onTogglePixelMode={() => setIsPixelMode(!isPixelMode)}
       />
-      <div className="w-full max-w-[min(92vw,400px)] aspect-square relative retro-screen">
+      <div className="w-full relative retro-screen overflow-hidden">
         <div className="absolute inset-0 rounded-lg bg-gradient-to-b from-black/50 to-transparent opacity-50" />
         <canvas
           ref={canvasRef}
           width={CANVAS_SIZE}
           height={CANVAS_SIZE}
-          className="w-full h-full bg-black rounded-lg relative z-10"
+          className="w-full h-full bg-black rounded-lg relative z-20"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+          }}
         />
         {!isStarted && <StartButton onStart={() => setIsStarted(true)} />}
+        {isStarted && !hasFirstInput && (
+          <div className="absolute inset-0 flex items-center justify-center z-30">
+            <div className="text-white text-center font-[Press_Start_2P] text-sm sm:text-base -translate-y-16 sm:-translate-y-20">
+              <p>Press any direction</p>
+              <p>to start moving!</p>
+            </div>
+          </div>
+        )}
       </div>
       <GameUI score={score} level={level} highScore={highScore} />
-      <div className="h-2 sm:h-4" /> {/* Reduced spacer */}
+      <div className="h-1 sm:h-2" />
       <TouchControls onDirectionChange={handleDirectionChange} />
     </div>
   );
