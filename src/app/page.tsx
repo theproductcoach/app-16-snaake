@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 
 type Position = {
@@ -708,33 +708,8 @@ function Game() {
 
   const level = Math.floor(score / SCORE_INCREMENT) + 1;
 
-  // Load high score on mount
-  useEffect(() => {
-    const savedHighScore = localStorage.getItem("snakeHighScore");
-    if (savedHighScore) {
-      setHighScore(parseInt(savedHighScore));
-    }
-  }, []);
-
-  // Update high score when game ends
-  useEffect(() => {
-    if (gameOver && score > highScore) {
-      setHighScore(score);
-      localStorage.setItem("snakeHighScore", score.toString());
-    }
-  }, [gameOver, score, highScore]);
-
-  // Load background image
-  useEffect(() => {
-    const img = new window.Image();
-    img.src = "/background.png";
-    img.onload = () => {
-      backgroundRef.current = img;
-    };
-  }, []);
-
   // Generate random food position with type
-  const generateFood = (): Food => {
+  const generateFood = useCallback((): Food => {
     const maxRetries = 100; // Prevent infinite recursion
     let retries = 0;
 
@@ -783,40 +758,68 @@ function Game() {
 
     // If all positions are occupied (very unlikely), return a default position
     return { x: 0, y: 0, type: "normal" };
-  };
+  }, [snake]);
 
   // Select random theme on mount and game restart
-  const selectRandomTheme = () => {
+  const selectRandomTheme = useCallback(() => {
     const randomIndex = Math.floor(Math.random() * THEMES.length);
     setCurrentTheme(THEMES[randomIndex]);
-  };
+  }, []);
+
+  const handleDirectionChange = useCallback(
+    (newDirection: Direction) => {
+      if (!hasFirstInput) {
+        setHasFirstInput(true);
+      }
+
+      switch (newDirection) {
+        case "UP":
+          if (direction !== "DOWN") setDirection(newDirection);
+          break;
+        case "DOWN":
+          if (direction !== "UP") setDirection(newDirection);
+          break;
+        case "LEFT":
+          if (direction !== "RIGHT") setDirection(newDirection);
+          break;
+        case "RIGHT":
+          if (direction !== "LEFT") setDirection(newDirection);
+          break;
+      }
+    },
+    [direction, hasFirstInput]
+  );
+
+  // Load high score on mount
+  useEffect(() => {
+    const savedHighScore = localStorage.getItem("snakeHighScore");
+    if (savedHighScore) {
+      setHighScore(parseInt(savedHighScore));
+    }
+  }, []);
+
+  // Update high score when game ends
+  useEffect(() => {
+    if (gameOver && score > highScore) {
+      setHighScore(score);
+      localStorage.setItem("snakeHighScore", score.toString());
+    }
+  }, [gameOver, score, highScore]);
+
+  // Load background image
+  useEffect(() => {
+    const img = new window.Image();
+    img.src = "/background.png";
+    img.onload = () => {
+      backgroundRef.current = img;
+    };
+  }, []);
 
   // Initialize game state and theme after mount
   useEffect(() => {
     setIsStarted(true);
     selectRandomTheme();
-  }, []);
-
-  const handleDirectionChange = (newDirection: Direction) => {
-    if (!hasFirstInput) {
-      setHasFirstInput(true);
-    }
-
-    switch (newDirection) {
-      case "UP":
-        if (direction !== "DOWN") setDirection(newDirection);
-        break;
-      case "DOWN":
-        if (direction !== "UP") setDirection(newDirection);
-        break;
-      case "LEFT":
-        if (direction !== "RIGHT") setDirection(newDirection);
-        break;
-      case "RIGHT":
-        if (direction !== "LEFT") setDirection(newDirection);
-        break;
-    }
-  };
+  }, [selectRandomTheme]);
 
   // Update keyboard event handler
   useEffect(() => {
@@ -839,7 +842,7 @@ function Game() {
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [direction]);
+  }, [handleDirectionChange]);
 
   // Update speed based on score
   useEffect(() => {
@@ -863,7 +866,7 @@ function Game() {
 
       return () => clearTimeout(timeout);
     }
-  }, [food, gameOver]);
+  }, [food, gameOver, generateFood]);
 
   // Game loop
   useEffect(() => {
@@ -928,7 +931,16 @@ function Game() {
 
     const gameLoop = setInterval(moveSnake, speed);
     return () => clearInterval(gameLoop);
-  }, [snake, direction, food, gameOver, isStarted, speed, hasFirstInput]);
+  }, [
+    snake,
+    direction,
+    food,
+    gameOver,
+    isStarted,
+    speed,
+    hasFirstInput,
+    generateFood,
+  ]);
 
   // Draw game
   useEffect(() => {
@@ -955,7 +967,8 @@ function Game() {
 
     // Handle high DPI displays
     const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _rect = canvas.getBoundingClientRect();
 
     // Set canvas size to match container
     canvas.width = maxWidth * dpr;
@@ -1054,7 +1067,8 @@ function Game() {
     } else {
       const xPos = food.x * CELL_SIZE;
       const yPos = food.y * CELL_SIZE;
-      const size = CELL_SIZE - 1;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const _size = CELL_SIZE - 1;
 
       if (isPixelMode) {
         const borderColor =
@@ -1128,6 +1142,9 @@ function Game() {
     level,
     currentTheme,
     isPixelMode,
+    direction,
+    generateFood,
+    selectRandomTheme,
   ]);
 
   if (!isStarted) {
@@ -1157,7 +1174,7 @@ function Game() {
         {!isStarted && <StartButton onStart={() => setIsStarted(true)} />}
         {isStarted && !hasFirstInput && (
           <div className="absolute inset-0 flex items-center justify-center z-30">
-            <div className="text-white text-center font-[Press_Start_2P] text-sm sm:text-base">
+            <div className="text-white text-center font-[Press_Start_2P] text-sm sm:text-base -translate-y-16 sm:-translate-y-20">
               <p>Press any direction</p>
               <p>to start moving!</p>
             </div>
