@@ -1114,6 +1114,7 @@ function Game() {
         setGameOver(false);
         setSpeed(INITIAL_SPEED);
         setScore(0);
+        setHasFirstInput(false);
         selectRandomTheme();
       });
     }
@@ -1155,7 +1156,7 @@ function Game() {
         />
         {!isStarted && <StartButton onStart={() => setIsStarted(true)} />}
         {isStarted && !hasFirstInput && (
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center z-30">
             <div className="text-white text-center font-[Press_Start_2P] text-sm sm:text-base">
               <p>Press any direction</p>
               <p>to start moving!</p>
